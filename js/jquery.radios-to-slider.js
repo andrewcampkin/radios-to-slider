@@ -126,14 +126,15 @@
                 $labels = this.bearer.find('.slider-label'),
                 radio = 1,
                 slider = this,
-                label;
+                label,
+                foundChecked = false,
+                $sliderbar = slider.bearer.find('.slider-bar');
 
             $inputs.each(function() {
-                var $this = $(this),
-                    $sliderbar = slider.bearer.find('.slider-bar'),
-                    radioId = $this.attr('id');
+                var $this = $(this);
 
                 if ($this.prop('checked')) {
+                    foundChecked = true;
                     var width = (radio * slider.KNOB_WIDTH) + (radio - 1) * slider.KNOB_MARGIN;
 
                     $sliderbar.css('display', 'block');
@@ -148,6 +149,12 @@
 
                 radio++;
             });
+
+            if (!foundChecked) {
+                slider.currentLevel = 0;
+                $sliderbar.css('display', 'none');
+                $sliderbar.width(0);
+            }
 
             //Set style for lower levels
             label = 0;
@@ -303,7 +310,8 @@
                 bearer: slider.bearer,
                 setDisable: slider.setDisable.bind(slider),
                 setEnable: slider.setEnable.bind(slider),
-                getValue: slider.getValue.bind(slider)
+                getValue: slider.getValue.bind(slider),
+                setSlider: slider.setSlider.bind(slider)
             });
         });
 
